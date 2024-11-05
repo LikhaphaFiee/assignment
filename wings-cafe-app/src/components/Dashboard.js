@@ -1,12 +1,27 @@
 import React, { useState, useEffect } from 'react';
+import { Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 import image1 from '../assets/images/image1.jpeg';
 import image2 from '../assets/images/image2.jpeg';
 import image3 from '../assets/images/image3.jpeg';
 import image4 from '../assets/images/image4.jpeg';
 
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
 const Dashboard = ({ products, deleteProduct }) => {
   const totalQuantity = products.reduce((total, product) => total + product.quantity, 0);
   const [backgroundIndex, setBackgroundIndex] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResult, setSearchResult] = useState(null);
+  const [searchNotification, setSearchNotification] = useState('');
 
   const images = [image1, image2, image3, image4];
 
@@ -17,10 +32,6 @@ const Dashboard = ({ products, deleteProduct }) => {
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
-
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchResult, setSearchResult] = useState(null);
-  const [searchNotification, setSearchNotification] = useState('');
 
   const handleSearch = () => {
     const foundProduct = products.find(
@@ -40,6 +51,20 @@ const Dashboard = ({ products, deleteProduct }) => {
     if (confirmDelete) {
       deleteProduct(productId);
     }
+  };
+
+  // Prepare data for the bar chart
+  const chartData = {
+    labels: products.map((product) => product.name),
+    datasets: [
+      {
+        label: 'Stock Quantity',
+        data: products.map((product) => product.quantity),
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      },
+    ],
   };
 
   return (
@@ -63,6 +88,11 @@ const Dashboard = ({ products, deleteProduct }) => {
 
       <h2>Dashboard</h2>
       <p>Total Quantity: {totalQuantity}</p>
+
+      {/* Stock Levels Bar Chart */}
+      <div style={{ width: '80%', margin: '20px auto', height: '300px' }}>
+        <Bar data={chartData} options={{ responsive: true, maintainAspectRatio: false }} />
+      </div>
 
       {/* Search Product */}
       <div>

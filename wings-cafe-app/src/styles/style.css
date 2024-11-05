@@ -188,3 +188,21 @@ a {
     background: rgba(255, 255, 255, 0.8); /* Adds a semi-transparent background to make the content readable */
     border-radius: 8px;
 }
+
+.dashboard-content {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8); /* Keeps the semi-transparent background */
+    border-radius: 8px;
+    color: rgb(12, 70, 147); /* Makes all text white */
+    font-family: 'Cursive', sans-serif; /* Handwriting style */
+    font-weight: bold;
+}
+
+/* Ensure table text is also affected */
+.dashboard-content table th, .dashboard-content table td {
+    color: hsl(228, 78%, 26%);
+    font-family: 'Cursive', sans-serif;
+    font-weight: bold;
+}
